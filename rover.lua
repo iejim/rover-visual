@@ -97,67 +97,32 @@ leerSensorVis(sensor): lee un sensor y devuelve los datos obtenidos
 sensor: handle al sensor a leer
 --]]
 function leerSensorVis(sensor)
-  r, data = sim.getVisionSensorImage(sensor)
+  r, data = sim.readVisionSensor(sensor)
   return data
 end
 
+--[[
+leerSensorVis(sensor): lee un sensor y devuelve los datos obtenidos
+sensor: handle al sensor a leer
+--]]
+function leerImagen(sensor)
+  local img = sim.getVisionSensorImage(sensor)
+  return img
+end
 
 function sysCall_actuation()
-  lectura()
-  print(Z)
-  print(acabo)
-  -- print(sim.getSimulationTime()-obvio)
-  if vuelta==false and STOP==false then
-    if Centro==true then
-      Z=Rojo+Verde+Azul
-      if(Z==2) then
-        acabo=true
-      end
-      final=false
-      if  backup==true and aux==false then
-        if acabo==true then
-          camino=4
-        elseif posicion==2 then
-          camino=1
-        elseif posicion==1 then
-          camino=3
-        elseif posicion==3 then
-          camino=2
-        elseif posicion==4 then
-          camino=4
-        end
-        aux=false
-        Centro=false
-        encontrado =false
-        iniciando=false
-        quedate=false
-        organizando=true
-        agarrando =false
-        vuelta=false
-        -- tiene=false
-        final=false
-      elseif tiene==true  then
-        guarda()
-        
-        
-      end
-    end
-    if iniciando==true then
-      inicio()
-    end
-    if organizando==true then
-      organizar()
-    end
-  end
-  if vuelta==true then
-    giro()
-  end
+  -- Actualizar los comandos de actuación
+  mover(0,0)
 end
 
 function sysCall_sensing()
   -- Actualizar las lecturas de los sensores
-  Del = leerSensorVis(Delantero)
-  Del2 = leerSensorVis(Delantero+sim.handleflag_greyscale)
+  
+  -- Lee data de color
+  Del = leerSensorVis(lDelantero)
+  
+  -- Lee data de imagen
+  Del2 = leerImagen(lDelantero+sim.handleflag_greyscale) 
 
-  -- etcetera
+  -- etcetera (¿toma de decisiones y generar comandos de actuación?)
 end
